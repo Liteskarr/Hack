@@ -29,3 +29,6 @@ class Person:
             self.surname = ''
             self.age = 0
             self.condition = []
+
+
+print(1)
