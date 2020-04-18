@@ -205,6 +205,40 @@ class Son(Person):
         return self.ind_son
 
 
+class Daughter(Person):
+
+    def set_name(self):
+        self.name = "Имя дочери"
+        return self.name
+
+    def set_surname(self):
+        self.surname = "Фамилия"
+        return self.surname
+
+    def set_age(self):
+        random.seed(RAND_SEED)
+        self.age = random.randint(Mom().set_age() - 18, Dad().set_age() - 19)
+        return self.age
+
+    def set_special(self):
+        self.special = {}
+        return self.special
+
+    def set_skills(self):
+        self.skills = set()
+        return self.skills
+
+    def __init__(self):
+        self.name, self.surname, self.age = Daughter.set_name(self), Daughter.set_surname(self), Daughter.set_age(self)
+        self.special, self.skills = Daughter.set_special(self), Daughter.set_skills(self)
+        self.ind_daughter = []
+        super().__init__(self.name, self.surname, self.age, self.special, self.skills)
+
+    def main(self):
+        self.ind_daughter = [Daughter().name, Daughter().surname, Daughter().age, Daughter().special, Daughter().skills]
+        return self.ind_daughter
+
+
 def events_time():
     """Проходит день."""
     for i in range(1, 13):
@@ -217,7 +251,6 @@ def events_time():
 
 
 def test():
-    print(Son().name)
     print(Mom().main())
     print(Person(*Mom().main()).main())
     print('     ')
@@ -226,6 +259,9 @@ def test():
     print('     ')
     print(Son().main())
     print(Person(*Son().main()).main())
+    print('     ')
+    print(Daughter().main())
+    print(Person(*Daughter().main()).main())
 
 
 if __name__ == '__main__':
