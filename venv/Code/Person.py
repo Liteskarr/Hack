@@ -2,22 +2,23 @@ import random
 
 
 class Person:
-    """ Персонаж. """
+    """ Персонажи. """
     CONTROL_LIMIT = 100
     STRESS_LIMIT = 100
     HUNGER_LIMIT = 100
     WATER_LIMIT = 100
     HP_LIMIT = 100
 
-    def __init__(self, name: str, surname: str, age: int, special: dict = {}, skills: set = set()):
+    def __init__(self, name: str, surname: str, age: int, special: dict = {}, skills: set = set(), buff: list = list(), debuff: list = list()):
         """ Конструктор. """
         self.name, self.surname, self.age = name, surname, age
         self.control,  self.hunger, self.water, self.hp = CONTROL_LIMIT, HUNGER_LIMIT, WATER_LIMIT, HP_LIMIT
         self.skills, self.special = skills, special
+        self.buff, self.debuff = buff, debuff
 
-    def damage(self, mhp):
+    def damage(self, dmg):
         """ Урон. """
-        self.hp -= mhp
+        self.hp -= dmg
         # Лимит.
         self.hp = 0 if self.hp < 0 else self.hp
 
@@ -55,7 +56,14 @@ class Person:
             self.control = 0
 
     def relax(self, relax_points):
-        """ Релакс. """
+        """ Отдых. """
         self.control += relax_points
         if self.control > self.STRESS_LIMIT:
             self.control = self.STRESS_LIMIT
+
+
+
+
+
+
+
