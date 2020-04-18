@@ -10,7 +10,7 @@ class Father(Person):
     def __init__(self):
         self.name =  ''
         self.surname =  ''
-        self.age =  random.randint( 20, 60)
+        self.age =  random.randint(20, 60)
         self.condition = []
         super().__init__()
 
