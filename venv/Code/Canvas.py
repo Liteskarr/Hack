@@ -2,7 +2,7 @@ class Canvas:
     def __init__(self, size_x=100, size_y=100):
         self.sizeX = size_x
         self.sizeY = size_y
-        self.commandConsole = []
+        self.commandDrawer = []
         self.create_image(size_x, size_y)
         self.symphol = '.'
 
@@ -17,16 +17,19 @@ class Canvas:
         self.imageCanvas = [[' '] * sizeX for i in range(sizeY)]
 
     def Point(self, x, y):
-        self.commandConsole.append({'point': [x, y]})
+        self.commandDrawer.append({'point': [x, y]})
 
     def Line(self, x, y, x1, y1):
-        self.commandConsole.append({'line': [x, y, x1, y1]})
+        self.commandDrawer.append({'line': [x, y, x1, y1]})
 
     def Circle(self, x, y, r):
-        self.commandConsole.append({'circle': [x, y, r]})
+        self.commandDrawer.append({'circle': [x, y, r]})
+
+    def Rectangle(self, x, y, x1, y1):
+        self.commandDrawer.append({'rectangle': [x, y, x1, y1]})
 
     def draw(self):
-        for i in self.commandConsole:
+        for i in self.commandDrawer:
             if i.get('point'):
                 coords = i.get('point')
                 self.drawPoint(coords[0], coords[1])
@@ -53,4 +56,4 @@ class Canvas:
             k = (y1 - y) / (x1 - x)
             b = y - k * x
             for cordX in range(x, x1 + 1):
-                self.drawPoint(cordX, int((k * x) + b))
+                self.drawPoint(cordX, int((k * cordX) + b))
