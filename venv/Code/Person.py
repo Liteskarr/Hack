@@ -3,33 +3,29 @@ import random
 
 class Person:
     """ Персонаж. """
+    CONTROL_LIMIT = 100
     STRESS_LIMIT = 100
     HUNGER_LIMIT = 100
     WATER_LIMIT = 100
     HP_LIMIT = 100
 
-    def __init__(self, name: str, surname: str, age: int, special: dict={}, skills: set=set()):
+    def __init__(self, name: str, surname: str, age: int, special: dict = {}, skills: set = set()):
         """ Конструктор. """
-        self.name = name
-        self.surname = surname
-        self.age = age
-        self.control = 100
-        self.hunger = 100
-        self.water = 100
-        self.hp = 100
+        self.name, self.surname, self.age = name, surname, age
+        self.control,  self.hunger, self.water, self.hp = CONTROL_LIMIT, HUNGER_LIMIT, WATER_LIMIT, HP_LIMIT
         self.skills = skills
         self.special = special
 
     def damage(self, mhp):
         self.hp -= mhp
-        if self.hp < 0 :
-            self.hp = 0
+        # Лимит.
+        self.hp = 0 if self.hp < 0 else self.hp
 
     def eat(self, hunger):
         """ Есть. """
         self.hunger += hunger
-        if self.hunger > 100:
-            self.hunger == 100
+        # Лимит.
+        self.hunger = 100 if self.hunger > 100 else self.hunger
 
     def left_hunger(self, hunger):
         """ Голодать. """
@@ -40,8 +36,8 @@ class Person:
 
     def drink(self, water):
         self.water += water
-        if self.water > self.WATER_LIMIT:
-            self.water = self.WATER_LIMIT
+        # Лимит.
+        self.water = self.WATER_LIMIT if self.water > self.WATER_LIMIT else self.water
 
     def left_water(self, water):
         self.water -= water
@@ -55,8 +51,7 @@ class Person:
             self.damage(int(0.5 * abs(self.stress)))
             self.control = 0
 
-    def relax(self, stress_point):
-        self.control += stress_point
+    def relax(self, relax_points):
+        self.control += relax_points
         if self.control > self.STRESS_LIMIT:
             self.control = self.STRESS_LIMIT
-
