@@ -59,3 +59,4 @@ class Person:
         self.control += stress_point
         if self.control > self.STRESS_LIMIT:
             self.control = self.STRESS_LIMIT
+
