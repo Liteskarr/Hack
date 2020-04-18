@@ -49,6 +49,27 @@ class Canvas:
     def add_object(self, obj: IRenderObject):
         obj.darw(self)
 
+    def fill_rect(self, x1, y1, sizeX, sizeY, char):
+        for x in range(x1, x1 + sizeX + 1):
+            for y in range(y1, y1 + sizeY + 1):
+                self.chars[x, y] = char
+
+    def add_text(self, x1, y1, sizeX, sizeY, text):
+        x = x1
+        y = y1
+        for char in text:
+            self.chars[x, y] = char
+            x += 1
+            if x >= x1 + sizeX:
+                y += 1
+                x = x1
+
+            if y >= y1 + sizeY:
+                return
+
+    def clear(self):
+        self.chars = defaultdict(lambda: self.fill_char)
+
     def draw(self):
         for y in range(self.sizeY):
             for x in range(self.sizeX):
