@@ -1,5 +1,9 @@
 import os
-import Canvas as Canvas
+import Code.Canvas as Canvas
+import Code.RenderObjects.Border as Border
+import colorama
+from colorama import Back
+colorama.init()
 
 
 def default_update():
@@ -7,6 +11,9 @@ def default_update():
 
 default_update()
 
-can = Canvas.Canvas(size_y=49)
+can = Canvas.Canvas(40, 40)
 
+can.draw()
+
+input()
 input()

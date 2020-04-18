@@ -1,6 +1,3 @@
-from Code.Canvas import Canvas
-
-
 class IRenderObject:
-    def darw(self, target: Canvas):
+    def darw(self, target):
         pass
