@@ -13,10 +13,10 @@ class Person:
         """ Конструктор. """
         self.name, self.surname, self.age = name, surname, age
         self.control,  self.hunger, self.water, self.hp = CONTROL_LIMIT, HUNGER_LIMIT, WATER_LIMIT, HP_LIMIT
-        self.skills = skills
-        self.special = special
+        self.skills, self.special = skills, special
 
     def damage(self, mhp):
+        """ Урон. """
         self.hp -= mhp
         # Лимит.
         self.hp = 0 if self.hp < 0 else self.hp
@@ -35,23 +35,27 @@ class Person:
             self.hunger = 0
 
     def drink(self, water):
+        """ Пить."""
         self.water += water
         # Лимит.
         self.water = self.WATER_LIMIT if self.water > self.WATER_LIMIT else self.water
 
     def left_water(self, water):
+        """ Жажда. """
         self.water -= water
         if self.water < 0:
             self.damage(2 * abs(self.water))
             self.water = 0
 
     def get_stress(self, stress_points):
+        """ Стресс. """
         self.stress -= stress_points
         if self.control < 0:
             self.damage(int(0.5 * abs(self.stress)))
             self.control = 0
 
     def relax(self, relax_points):
+        """ Релакс. """
         self.control += relax_points
         if self.control > self.STRESS_LIMIT:
             self.control = self.STRESS_LIMIT
