@@ -14,17 +14,20 @@ TIME_SECONDS = 2
 PERSON_EVENTS = ['fracture', 'overeaten']
 PERSON_EVENTS_PRINT = {'fracture': 'Вы всподкнулись и получили перелом.',
                        'overeaten': 'Вы слишком много съели и объелись.',
-                       'full_eat': 'Вы вкусно покушали и чувствуете сытость.'}
+                       'full_eat': 'Вы вкусно покушали и чувствуете сытость.',
+                       '': ''}
 
 
 class Person:
     """ Персонажи. """
 
     def __init__(self, name: str, surname: str, age: int, special: dict = dict(), skills: set = set(),
-                 buff: list = set(), de_buff: list = set()):
+                 hp: int = LIMIT_HP, control: int = LIMIT_CONTROL, hunger: int = LIMIT_HUNGER,
+                 water: int = LIMIT_WATER, buff: list = set(), de_buff: list = set()):
         """ Конструктор. """
         self.name, self.surname, self.age = name, surname, age
-        self.control,  self.hunger, self.water, self.hp, self.stress = LIMIT_CONTROL, LIMIT_HUNGER, LIMIT_WATER, LIMIT_HP, LIMIT_STRESS
+        self.control,  self.hunger, self.water = control, hunger, water
+        self.hp, self.stress = hp, stress
         self.skills, self.special = skills, special
         self.buff, self.de_buff = buff, de_buff
 
@@ -127,13 +130,18 @@ class Mom(Person):
         return self.skills
 
     def __init__(self):
+        self.control, self.hunger, self.water = LIMIT_CONTROL, LIMIT_HUNGER, LIMIT_WATER
+        self.hp, self.stress = LIMIT_HP, LIMIT_STRESS
+
         self.name, self.surname = Mom.set_name(self), Mom.set_surname(self)
         self.special, self.age, self.skills = Mom.set_special(self),  Mom.set_age(self), Mom.set_skills(self)
         self.ind_mom = []
-        super().__init__(self.name, self.surname, self.age, self.special, self.skills)
+        super().__init__(self.name, self.surname, self.age, self.special,
+                         self.skills, self.hp, self.control, self.hunger, self.water)
 
     def main(self):
-        self.ind_mom = [Mom().name, Mom().surname, Mom().age, Mom().special, Mom().skills]
+        self.ind_mom = [Mom().name, Mom().surname, Mom().age, Mom().special, Mom().skills,
+                        Mom().hp, Mom().stress, Mom().control, Mom().hunger, Mom().water]
         return self.ind_mom
 
 
@@ -183,7 +191,7 @@ class Son(Person):
 
     def set_age(self):
         random.seed(RAND_SEED)
-        self.age = random.randint(Mom().set_age() - 18, Dad().set_age() - 19)
+        self.age = random.randint(Mom().set_age() - 19, Dad().set_age() - 20)
         return self.age
 
     def set_special(self):
@@ -217,7 +225,7 @@ class Daughter(Person):
 
     def set_age(self):
         random.seed(RAND_SEED)
-        self.age = random.randint(Mom().set_age() - 18, Dad().set_age() - 19)
+        self.age = random.randint(Mom().set_age() - 19, Dad().set_age() - 20)
         return self.age
 
     def set_special(self):
@@ -252,6 +260,7 @@ def events_time():
 
 def test():
     print(Mom().main())
+
     print(Person(*Mom().main()).main())
     print('     ')
     print(Dad().main())
