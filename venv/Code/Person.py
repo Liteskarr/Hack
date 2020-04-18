@@ -3,17 +3,19 @@ import random
 
 class Person:
     """ Персонажи. """
-    CONTROL_LIMIT = 100
-    STRESS_LIMIT = 100
-    HUNGER_LIMIT = 100
-    WATER_LIMIT = 100
-    HP_LIMIT = 100
+    LIMIT_CONTROL = 100
+    LIMIT_STRESS = 100
+    LIMIT_HUNGER = 100
+    LIMIT_WATER = 100
+    LIMIT_HP = 100
+    LIMIT_BUFF = 5
+    LIMIT_DE_BUFF = 5
 
     def __init__(self, name: str, surname: str, age: int, special: dict = {}, skills: set = set(),
                  buff: list = list(), de_buff: list = list()):
         """ Конструктор. """
         self.name, self.surname, self.age = name, surname, age
-        self.control,  self.hunger, self.water, self.hp = CONTROL_LIMIT, HUNGER_LIMIT, WATER_LIMIT, HP_LIMIT
+        self.control,  self.hunger, self.water, self.hp, self.stress = LIMIT_CONTROL, LIMIT_HUNGER, LIMIT_WATER, LIMIT_HP, LIMIT_STRESS
         self.skills, self.special = skills, special
         self.buff, self.de_buff = buff, de_buff
 
@@ -61,3 +63,17 @@ class Person:
         self.control += relax_points
         if self.control > self.STRESS_LIMIT:
             self.control = self.STRESS_LIMIT
+
+    def add_buff(self, buffs):
+        """ Добавление бафа. """
+        if len(self.buff) < LIMIT_BUFF:
+            self.buff.append(buffs)
+        else:
+            print('Количество бафов максимально')
+
+    def add_de_buff(self, de_buffs):
+        """ Добавление дебафа."""
+        if len(self.de_buff) < LIMIT_DE_BUFF:
+            self.de_buff.append(de_buffs)
+        else:
+            print('Количество дебафов максимально')
