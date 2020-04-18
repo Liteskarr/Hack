@@ -11,13 +11,15 @@ LIMIT_BUFF = 5
 LIMIT_DE_BUFF = 5
 TIME_SECONDS = 2
 PERSON_EVENTS = ['fracture', 'overeaten']
-PERSON_EVENTS_PRINT = {'fracture': 'получили перелом', 'overeaten': 'объелись'}
+PERSON_EVENTS_PRINT = {'fracture': 'Вы всподкнулись и получили перелом.',
+                       'overeaten': 'Вы слишком много съели и объелись.',
+                       'full_eat': 'Вы вкусно покушали и чувствуете сытость.'}
 
 
 class Person:
     """ Персонажи. """
 
-    def __init__(self, name: str, surname: str, age: int, special: dict = {}, skills: set = set(),
+    def __init__(self, name: str, surname: str, age: int, special: dict = dict(), skills: set = set(),
                  buff: list = set(), de_buff: list = set()):
         """ Конструктор. """
         self.name, self.surname, self.age = name, surname, age
@@ -30,13 +32,20 @@ class Person:
         self.hp -= dmg
         # Лимит.
         self.hp = 0 if self.hp < 0 else self.hp
+        if self.hp == 0:
+            print(f'Персонаж умер.')
 
     def eat(self, hunger):
         """ Есть. """
         self.hunger += hunger
         # Лимит.
-        if self.hunger > 100:
+        if self.hunger > 60 and (self.hunger < 100):
+            # сытость
+            print(PERSON_EVENTS_PRINT['full_eat'])
+            add_buff(self, 'full_eat')
+        elif self.hunger > 100:
             # объелся
+            print(PERSON_EVENTS_PRINT['overeaten'])
             add_de_buff(self, 'overeaten')
             self.hunger = 100
 
@@ -85,7 +94,7 @@ class Person:
         if len(self.de_buff) < LIMIT_DE_BUFF:
             self.de_buff.add(de_buffs)
             print(self.de_buff)
-            print(f'Вы {PERSON_EVENTS_PRINT[de_buffs]}')
+            print(f'{PERSON_EVENTS_PRINT[de_buffs]}')
         else:
             print('Количество дебафов максимально')
 
@@ -122,16 +131,49 @@ class Mom:
         return self.ind_mom
 
 
+class Dad:
+    def __init__(self):
+        self.name, self.surname = '', ''
+        self.special, self.age, self.skills = {}, 0, {}
+        self.ind_dad = []
+
+    def set_name(self):
+        self.name = "Имя отца"
+        return self.name
+
+    def set_surname(self):
+        self.surname = "Фамилия"
+        return self.surname
+
+    def set_age(self):
+        self.age = random.randint(22, 60)
+        return self.age
+
+    def set_special(self):
+        self.special = {}
+        return self.special
+
+    def set_skills(self):
+        self.skills = {}
+        return self.skills
+
+    def main(self):
+        self.ind_dad = [Dad.set_name(self), Dad.set_surname(self),
+                        Dad.set_age(self), Dad.set_special(self), Dad.set_skills(self)]
+        return self.ind_dad
+
+
 def events_time():
     """Проходит день."""
     for i in range(1, 13):
         if random.randint(1, 6) == 3:
             event = random.choice(PERSON_EVENTS)
             print(f'Сейчас {i} час. Выпало {event}')
-            de_buffs_event = Person
-            print(de_buffs_event(*Mom().main()).add_de_buff(event))
+            # дебаф добовляем персанажу Mom
+            print(Person(*Mom().main()).add_de_buff(event))
         time.sleep(TIME_SECONDS)
 
 
 if __name__ == '__main__':
-    events_time()
+    Person(*Mom().main()).add_de_buff(random.choice(PERSON_EVENTS))
+    Person(*)
