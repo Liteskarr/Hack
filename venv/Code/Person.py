@@ -9,6 +9,7 @@ class Person:
     HP_LIMIT = 100
 
     def __init__(self, name: str, surname: str, age: int, special: dict={}, skills: set=set()):
+        """ Конструктор. """
         self.name = name
         self.surname = surname
         self.age = age
@@ -30,7 +31,7 @@ class Person:
         if self.hunger > 100:
             self.hunger == 100
 
-    def strave(self, hunger):
+    def left_hunger(self, hunger):
         """ Голодать. """
         self.hunger -= hunger
         if self.hunger < 0:
@@ -42,10 +43,16 @@ class Person:
         if self.water > self.WATER_LIMIT:
             self.water = self.WATER_LIMIT
 
+    def left_water(self, water):
+        self.water -= water
+        if self.water < 0:
+            self.damage(2 * abs(self.water))
+            self.water = 0
+
     def get_stress(self, stress_points):
         self.stress -= stress_points
         if self.control < 0:
-            self.damage(abs(self.stress))
+            self.damage(int(0.5 * abs(self.stress)))
             self.control = 0
 
     def relax(self, stress_point):
