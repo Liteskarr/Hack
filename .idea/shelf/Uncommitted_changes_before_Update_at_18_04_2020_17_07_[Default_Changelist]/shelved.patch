@@ -1,0 +1,61 @@
+Index: venv/Code/Canvas.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- venv/Code/Canvas.py	(date 1587218704944)
++++ venv/Code/Canvas.py	(date 1587218704944)
+@@ -0,0 +1,40 @@
++from collections import defaultdict
++
++
++class Canvas:
++    """ Холст для рисования. """
++    def __init__(self, size, startxy=(0, 0), fill=' '):
++        self.draws = defaultdict(lambda: ' ')
++        self.size = size
++        self.startxy = startxy
++        self.fill = fill
++
++    def valid_index(self, x, y):
++        """ Проверяет валидность координат. """
++        return 0 <= x < self.size[0] and 0 <= y < self.size[1]
++
++    def add_char(self, x, y, char):
++        """ Рисует char в x,y. """
++        if not self.valid_index(x, y):
++            raise IndexError
++            return
++        self.draws[x, y] = char
++
++    def print(self, x, y, text):
++        """ Пишет текст c x,y. """
++        for i in text:
++            self.add_char(x, y, i)
++            x += 1
++            if x >= self.size[0]:
++                x = 0
++                y += 1
++
++            if y >= self.size[1]:
++                return
++
++    def draw(self):
++        """ Отрисовывает все. """
++        for y in range(self.size[1]):
++            for x in range(self.size[0]):
++                print(self.draws[x, y][-1], end='')
++            print()
+Index: venv/Code/Game.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- venv/Code/Game.py	(date 1587218868218)
++++ venv/Code/Game.py	(date 1587218868218)
+@@ -0,0 +1,5 @@
++import threading
++
++
++class Game:
++    def __int__(self):
