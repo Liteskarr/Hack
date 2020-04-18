@@ -2,43 +2,27 @@ import random
 
 
 class Person:
-    def __init__(self):
-        pass
+    def __init__(self, name, surname, age):
+        self.name = name
+        self.surname = surname
+        self.age = age
 
 
 class Father(Person):
-    def __init__(self):
-        self.name = ''
-        self.surname = ''
-        self.age = random.randint(20, 60)
-        self.condition = []
-        super().__init__()
+    def __init__(self, name, surname, age):
+        super().__init__(name, surname, age)
 
 
 class Mom(Person):
-    def __init__(self):
-        self.name = ''
-        self.surname = ''
-        self.age = 0
-        self.age = random.randint(20, 55)
-        self.condition = []
-        super().__init__()
+    def __init__(self, name, surname, age):
+        super().__init__(name, surname, age)
 
 
-class Con(Person):
-    def __init__(self):
-        self.name = ''
-        self.surname = ''
-        self.age = 0
-        self.condition = []
-        super().__init__()
+class Son(Person):
+    def __init__(self, name, surname, age):
+        super().__init__(name, surname, age)
 
 
 class Daughter(Person):
-    def __init__(self):
-        self.name = ''
-        self.surname = ''
-        self.age = 0
-        self.condition = []
-        super().__init__()
-
+    def __init__(self, name, surname, age):
+        super().__init__(name, surname, age)
