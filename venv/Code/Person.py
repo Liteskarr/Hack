@@ -100,15 +100,10 @@ class Person:
             print('Количество дебафов максимально')
 
     def main(self):
-        return self.name
+        return self.name, self.age
 
 
 class Mom(Person):
-    def __init__(self):
-        self.name, self.surname = '', ''
-        self.special, self.age, self.skills = {}, 0, set()
-        self.ind_mom = []
-        super().__init__(self.name, self.surname, self.age, self.special, self.skills)
 
     def set_name(self):
         self.name = "Имя матери"
@@ -128,21 +123,21 @@ class Mom(Person):
         return self.special
 
     def set_skills(self):
-        self.skills = {}
+        self.skills = set()
         return self.skills
 
+    def __init__(self):
+        self.name, self.surname = Mom.set_name(self), Mom.set_surname(self)
+        self.special, self.age, self.skills = Mom.set_special(self),  Mom.set_age(self), Mom.set_skills(self)
+        self.ind_mom = []
+        super().__init__(self.name, self.surname, self.age, self.special, self.skills)
+
     def main(self):
-        self.ind_mom = [Mom.set_name(self), Mom.set_surname(self),
-                        Mom.set_age(self), Mom.set_special(self), Mom.set_skills(self)]
+        self.ind_mom = [Mom().name, Mom().surname, Mom().age, Mom().special, Mom().skills]
         return self.ind_mom
 
 
 class Dad(Person):
-    def __init__(self):
-        self.name, self.surname = '', ''
-        self.special, self.age, self.skills = {}, 0, set()
-        self.ind_dad = []
-        super().__init__(self.name, self.surname, self.age, self.special, self.skills)
 
     def set_name(self):
         self.name = "Имя отца"
@@ -162,13 +157,52 @@ class Dad(Person):
         return self.special
 
     def set_skills(self):
-        self.skills = {}
+        self.skills = set()
         return self.skills
 
+    def __init__(self):
+        self.name, self.surname = Dad.set_name(self), Dad.set_surname(self)
+        self.special, self.age, self.skills = Dad.set_special(self), Dad.set_age(self), Dad.set_skills(self)
+        self.ind_dad = []
+        super().__init__(self.name, self.surname, self.age, self.special, self.skills)
+
     def main(self):
-        self.ind_dad = [Dad.set_name(self), Dad.set_surname(self),
-                        Dad.set_age(self), Dad.set_special(self), Dad.set_skills(self)]
+        self.ind_dad = [Dad().name, Dad().surname, Dad().age, Dad().special, Dad().skills]
         return self.ind_dad
+
+
+class Son(Person):
+
+    def set_name(self):
+        self.name = "Имя сына"
+        return self.name
+
+    def set_surname(self):
+        self.surname = "Фамилия"
+        return self.surname
+
+    def set_age(self):
+        random.seed(RAND_SEED)
+        self.age = random.randint(Mom().set_age() - 18, Dad().set_age() - 19)
+        return self.age
+
+    def set_special(self):
+        self.special = {}
+        return self.special
+
+    def set_skills(self):
+        self.skills = set()
+        return self.skills
+
+    def __init__(self):
+        self.name, self.surname = Son.set_name(self), Son.set_surname(self)
+        self.special, self.age, self.skills = Son.set_special(self), Son.set_age(self), Son.set_skills(self)
+        self.ind_son = []
+        super().__init__(self.name, self.surname, self.age, self.special, self.skills)
+
+    def main(self):
+        self.ind_son = [Son().name, Son().surname, Son().age, Son().special, Son().skills]
+        return self.ind_son
 
 
 def events_time():
@@ -182,9 +216,17 @@ def events_time():
         time.sleep(TIME_SECONDS)
 
 
-if __name__ == '__main__':
+def test():
+    print(Son().name)
     print(Mom().main())
     print(Person(*Mom().main()).main())
     print('     ')
     print(Dad().main())
     print(Person(*Dad().main()).main())
+    print('     ')
+    print(Son().main())
+    print(Person(*Son().main()).main())
+
+
+if __name__ == '__main__':
+    test()
