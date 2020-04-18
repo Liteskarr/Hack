@@ -2,6 +2,7 @@ import random
 import time
 
 
+RAND_SEED = random.randint(0, 100)
 LIMIT_CONTROL = 100
 LIMIT_STRESS = 100
 LIMIT_HUNGER = 100
@@ -98,12 +99,16 @@ class Person:
         else:
             print('Количество дебафов максимально')
 
+    def main(self):
+        return self.name
 
-class Mom:
+
+class Mom(Person):
     def __init__(self):
         self.name, self.surname = '', ''
-        self.special, self.age, self.skills = {}, 0, {}
+        self.special, self.age, self.skills = {}, 0, set()
         self.ind_mom = []
+        super().__init__(self.name, self.surname, self.age, self.special, self.skills)
 
     def set_name(self):
         self.name = "Имя матери"
@@ -114,6 +119,7 @@ class Mom:
         return self.surname
 
     def set_age(self):
+        random.seed(RAND_SEED)
         self.age = random.randint(20, 55)
         return self.age
 
@@ -131,11 +137,12 @@ class Mom:
         return self.ind_mom
 
 
-class Dad:
+class Dad(Person):
     def __init__(self):
         self.name, self.surname = '', ''
-        self.special, self.age, self.skills = {}, 0, {}
+        self.special, self.age, self.skills = {}, 0, set()
         self.ind_dad = []
+        super().__init__(self.name, self.surname, self.age, self.special, self.skills)
 
     def set_name(self):
         self.name = "Имя отца"
@@ -146,6 +153,7 @@ class Dad:
         return self.surname
 
     def set_age(self):
+        random.seed(RAND_SEED)
         self.age = random.randint(22, 60)
         return self.age
 
@@ -175,5 +183,8 @@ def events_time():
 
 
 if __name__ == '__main__':
-    Person(*Mom().main()).add_de_buff(random.choice(PERSON_EVENTS))
-    Person(*)
+    print(Mom().main())
+    print(Person(*Mom().main()).main())
+    print('     ')
+    print(Dad().main())
+    print(Person(*Dad().main()).main())
