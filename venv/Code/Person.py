@@ -9,12 +9,13 @@ class Person:
     WATER_LIMIT = 100
     HP_LIMIT = 100
 
-    def __init__(self, name: str, surname: str, age: int, special: dict = {}, skills: set = set(), buff: list = list(), debuff: list = list()):
+    def __init__(self, name: str, surname: str, age: int, special: dict = {}, skills: set = set(),
+                 buff: list = list(), de_buff: list = list()):
         """ Конструктор. """
         self.name, self.surname, self.age = name, surname, age
         self.control,  self.hunger, self.water, self.hp = CONTROL_LIMIT, HUNGER_LIMIT, WATER_LIMIT, HP_LIMIT
         self.skills, self.special = skills, special
-        self.buff, self.debuff = buff, debuff
+        self.buff, self.de_buff = buff, de_buff
 
     def damage(self, dmg):
         """ Урон. """
@@ -60,10 +61,3 @@ class Person:
         self.control += relax_points
         if self.control > self.STRESS_LIMIT:
             self.control = self.STRESS_LIMIT
-
-
-
-
-
-
-
