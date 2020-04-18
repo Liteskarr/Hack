@@ -1,49 +1,31 @@
+from collections import defaultdict
+
+
 class Canvas:
-    def __init__(self, size_x=100, size_y=100):
+    def __init__(self, size_x, size_y, fill=' '):
         self.sizeX = size_x
         self.sizeY = size_y
-        self.commandDrawer = []
-        self.create_image(size_x, size_y)
-        self.symphol = '.'
+        self.fill_char = fill
+        self.chars = defaultdict(lambda: fill)
 
-    def set_size(self, size_x, size_y):
+    def resize(self, size_x, size_y):
         self.sizeX = size_x
         self.sizeY = size_y
 
-    def set_symphol(self, sym='.'):
-        self.symphol = str(sym)
+    def set_fillchar(self, fillchar):
+        self.fill_char = fillchar
+        self.chars.default_factory = lambda: fillchar
 
-    def create_image(self, sizeX, sizeY):
-        self.imageCanvas = [[' '] * sizeX for i in range(sizeY)]
+    def add_char(self, x, y, char):
+        self.chars[x, y] = char
 
-    def Point(self, x, y):
-        self.commandDrawer.append({'point': [x, y]})
+    def add_line(self, x1, y1, x2, y2):
 
-    def Line(self, x, y, x1, y1):
-        self.commandDrawer.append({'line': [x, y, x1, y1]})
-
-    def Circle(self, x, y, r):
-        self.commandDrawer.append({'circle': [x, y, r]})
-
-    def Rectangle(self, x, y, x1, y1):
-        self.commandDrawer.append({'rectangle': [x, y, x1, y1]})
 
     def draw(self):
-        for i in self.commandDrawer:
-            if i.get('point'):
-                coords = i.get('point')
-                self.drawPoint(coords[0], coords[1])
-            elif i.get('line'):
-                coords = i.get('line')
-                self.drawLine(coords[0], coords[1], coords[2], coords[3])
-            elif i.get('circle'):
-                coords = i.get('circle')
-                pass
-        for i in self.imageCanvas:
-            print(''.join(i))
-
-    def drawPoint(self, x, y):
-        self.imageCanvas[x][y] = self.symphol
+        for x in range(self.sizeX):
+            for y in range(self.sizeY):
+                print(defaultdict)
 
     def drawLine(self, x, y, x1, y1):
         if x == x1 and y1 != y:

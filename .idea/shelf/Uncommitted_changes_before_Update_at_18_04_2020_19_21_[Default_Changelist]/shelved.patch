@@ -1,0 +1,12 @@
+Index: venv/Code/RenderObjects/IChose.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- venv/Code/RenderObjects/IChose.py	(date 1587226858012)
++++ venv/Code/RenderObjects/IChose.py	(date 1587226858012)
+@@ -0,0 +1,3 @@
++class IChose:
++    def __init__(self):
++        self.
+\ No newline at end of file
