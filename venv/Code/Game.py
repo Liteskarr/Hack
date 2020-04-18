@@ -3,7 +3,7 @@ import os
 
 
 class Game:
-    def __int__(self):
+    def __init__(self):
         self.draw_thread = None
         self.input_thread = None
         self.update_thread = None
