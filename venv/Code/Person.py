@@ -1,18 +1,25 @@
 import random
+import time
+
+
+MOM = ['Имя', 'Фамилия', 25, {}, set(), set(), set()]
+LIMIT_CONTROL = 100
+LIMIT_STRESS = 100
+LIMIT_HUNGER = 100
+LIMIT_WATER = 100
+LIMIT_HP = 100
+LIMIT_BUFF = 5
+LIMIT_DE_BUFF = 5
+TIME_SECONDS = 3
+PERSON_EVENTS = ['fracture', 'overeaten']
+PERSON_EVENTS_PRINT = {'fracture': 'получили перелом', 'overeaten': 'объелись'}
 
 
 class Person:
     """ Персонажи. """
-    LIMIT_CONTROL = 100
-    LIMIT_STRESS = 100
-    LIMIT_HUNGER = 100
-    LIMIT_WATER = 100
-    LIMIT_HP = 100
-    LIMIT_BUFF = 5
-    LIMIT_DE_BUFF = 5
 
     def __init__(self, name: str, surname: str, age: int, special: dict = {}, skills: set = set(),
-                 buff: list = list(), de_buff: list = list()):
+                 buff: list = set(), de_buff: list = set()):
         """ Конструктор. """
         self.name, self.surname, self.age = name, surname, age
         self.control,  self.hunger, self.water, self.hp, self.stress = LIMIT_CONTROL, LIMIT_HUNGER, LIMIT_WATER, LIMIT_HP, LIMIT_STRESS
@@ -29,7 +36,10 @@ class Person:
         """ Есть. """
         self.hunger += hunger
         # Лимит.
-        self.hunger = 100 if self.hunger > 100 else self.hunger
+        if self.hunger > 100:
+            # объелся
+            add_de_buff(self, 'overeaten')
+            self.hunger = 100
 
     def left_hunger(self, hunger):
         """ Голодать. """
@@ -74,6 +84,21 @@ class Person:
     def add_de_buff(self, de_buffs):
         """ Добавление дебафа."""
         if len(self.de_buff) < LIMIT_DE_BUFF:
-            self.de_buff.append(de_buffs)
+            self.de_buff.add(de_buffs)
+            print(self.de_buff)
+            print(f'Вы {PERSON_EVENTS_PRINT[de_buffs]}')
         else:
             print('Количество дебафов максимально')
+
+
+def events_time():
+    while True:
+        eve = random.choice(PERSON_EVENTS)
+        print(eve)
+        de_buffs_eve = Person
+        print(de_buffs_eve(*MOM).add_de_buff(eve))
+        time.sleep(TIME_SECONDS)
+
+
+if __name__ == '__main__':
+    events_time()
