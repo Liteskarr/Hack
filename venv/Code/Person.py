@@ -61,8 +61,8 @@ class Person:
     def relax(self, relax_points):
         """ Отдых. """
         self.control += relax_points
-        if self.control > self.STRESS_LIMIT:
-            self.control = self.STRESS_LIMIT
+        # Лимит.
+        self.control = self.STRESS_LIMIT if self.control > self.STRESS_LIMIT else self.control
 
     def add_buff(self, buffs):
         """ Добавление бафа. """
