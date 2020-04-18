@@ -2,7 +2,6 @@ import random
 import time
 
 
-MOM = ['Имя', 'Фамилия', 25, {}, set(), set(), set()]
 LIMIT_CONTROL = 100
 LIMIT_STRESS = 100
 LIMIT_HUNGER = 100
@@ -10,7 +9,7 @@ LIMIT_WATER = 100
 LIMIT_HP = 100
 LIMIT_BUFF = 5
 LIMIT_DE_BUFF = 5
-TIME_SECONDS = 3
+TIME_SECONDS = 2
 PERSON_EVENTS = ['fracture', 'overeaten']
 PERSON_EVENTS_PRINT = {'fracture': 'получили перелом', 'overeaten': 'объелись'}
 
@@ -91,12 +90,46 @@ class Person:
             print('Количество дебафов максимально')
 
 
+class Mom:
+    def __init__(self):
+        self.name, self.surname = '', ''
+        self.special, self.age, self.skills = {}, 0, {}
+        self.ind_mom = []
+
+    def set_name(self):
+        self.name = "Имя матери"
+        return self.name
+
+    def set_surname(self):
+        self.surname = "Фамилия"
+        return self.surname
+
+    def set_age(self):
+        self.age = random.randint(20, 55)
+        return self.age
+
+    def set_special(self):
+        self.special = {}
+        return self.special
+
+    def set_skills(self):
+        self.skills = {}
+        return self.skills
+
+    def main(self):
+        self.ind_mom = [Mom.set_name(self), Mom.set_surname(self),
+                        Mom.set_age(self), Mom.set_special(self), Mom.set_skills(self)]
+        return self.ind_mom
+
+
 def events_time():
-    while True:
-        eve = random.choice(PERSON_EVENTS)
-        print(eve)
-        de_buffs_eve = Person
-        print(de_buffs_eve(*MOM).add_de_buff(eve))
+    """Проходит день."""
+    for i in range(1, 13):
+        if random.randint(1, 6) == 3:
+            event = random.choice(PERSON_EVENTS)
+            print(f'Сейчас {i} час. Выпало {event}')
+            de_buffs_event = Person
+            print(de_buffs_event(*Mom().main()).add_de_buff(event))
         time.sleep(TIME_SECONDS)
 
 
