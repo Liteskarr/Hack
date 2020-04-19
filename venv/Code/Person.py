@@ -31,7 +31,6 @@ class Person:
         self.hp, self.stress = hp, stress
         self.skills, self.special = skills, special
         self.buff, self.de_buff = buff, de_buff
-        self.temp = []
 
     def v_vid(self):
         self.temp = [self.name, self.surname, self.age, self.hp, self.stress, self.control,
@@ -85,7 +84,6 @@ class Person:
                 if Person.is_live(self) is False:
                     print(f'Персонаж погиб в результате голода.')
                 self.hunger = 0
-        return Person.v_vid(self)
 
     def drink(self, water):
         """ Пить."""
@@ -200,17 +198,12 @@ def events_time():
 
 
 def test():
-    n = Mom().main()
-    print(n)
-    t = Person().left_hunger(50)
-    print(t)
-    t = Person(*t).left_hunger(50)
-    print(t)
-    t = Person(*t).left_hunger(50)
-    print(t)
-    t = Person(*t).left_hunger(50)
-    t = Person(*t).left_hunger(50)
-    t = Person(*t).left_hunger(50)
+    mom = Person(name='Mama')
+    dad = Person(name='Dad')
+    mom.left_hunger(6)
+    print(mom.hunger)
+    mom.left_hunger(6)
+    print(mom.hunger)
 
 
 if __name__ == '__main__':
