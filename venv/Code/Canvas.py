@@ -1,71 +1,77 @@
+from collections import defaultdict
+from Code.IRenderObject import IRenderObject
+
+
 class Canvas:
-    def __init__(self, size_x=100, size_y=100):
+    def __init__(self, size_x, size_y, fill=' '):
         self.sizeX = size_x
         self.sizeY = size_y
-        self.commandDrawer = []
-        self.create_image(size_x, size_y)
-        self.symphol = '.'
+        self.fill_char = fill
+        self.chars = defaultdict(lambda: fill)
 
-    def set_size(self, size_x, size_y):
+    def resize(self, size_x, size_y):
         self.sizeX = size_x
         self.sizeY = size_y
 
-    def set_symphol(self, sym='.'):
-        self.symphol = str(sym)
+    def set_fillchar(self, fillchar):
+        self.fill_char = fillchar
+        self.chars.default_factory = lambda: fillchar
 
-    def create_image(self, sizeX, sizeY):
-        self.imageCanvas = [[' '] * sizeX for i in range(sizeY)]
+    def add_char(self, x, y, char):
+        self.chars[x, y] = char
 
-    def Point(self, x, y):
-        self.commandDrawer.append({'point': [x, y]})
+    def add_line(self, x1, y1, x2, y2, char):
+        dx = x2 - x1
+        dy = y2 - y1
 
-    def Line(self, x, y, x1, y1):
-        self.commandDrawer.append({'line': [x, y, x1, y1]})
+        dmax = abs(max(dx, dy))
+        dx /= dmax
+        dy /= dmax
 
-    def Circle(self, x, y, r):
-        self.commandDrawer.append({'circle': [x, y, r]})
+        x = x1
+        y = y1
+        gx = round(x)
+        gy = round(y)
 
-    def Rectangle(self, x, y, x1, y1):
-        self.commandDrawer.append({'rectangle': [x, y, x1, y1]})
+        while x1 <= gx <= x2 and y1 <= gy <= y2:
+            self.chars[gx, gy] = char
+            x += dx
+            y += dy
+            gx = round(x)
+            gy = round(y)
+
+    def add_rect(self, x0, y0, size_x, size_y, char):
+        self.add_line(x0, y0, x0 + size_x, y0, char)
+        self.add_line(x0, y0, x0, y0 + size_y, char)
+        self.add_line(x0 + size_x, y0, x0 + size_x, y0 + size_y, char)
+        self.add_line(x0, y0 + size_y, x0 + size_x, y0 + size_y, char)
+
+    def add_object(self, obj: IRenderObject):
+        obj.darw(self)
+
+    def fill_rect(self, x1, y1, sizeX, sizeY, char):
+        for x in range(x1, x1 + sizeX + 1):
+            for y in range(y1, y1 + sizeY + 1):
+                self.chars[x, y] = char
+
+    def add_text(self, x1, y1, sizeX, sizeY, text):
+        x = x1
+        y = y1
+        for char in text:
+            self.chars[x, y] = char
+            x += 1
+            if x >= x1 + sizeX:
+                y += 1
+                x = x1
+
+            if y >= y1 + sizeY:
+                return
+
+    def clear(self):
+        self.chars = defaultdict(lambda: self.fill_char)
 
     def draw(self):
-        for i in self.commandDrawer:
-            if i.get('point'):
-                coords = i.get('point')
-                self.drawPoint(coords[0], coords[1])
-            elif i.get('line'):
-                coords = i.get('line')
-                self.drawLine(coords[0], coords[1], coords[2], coords[3])
-            elif i.get('circle'):
-                coords = i.get('circle')
-                pass
-            elif i.get('rectangle'):
-                coords = i.get('rectangle')
-                self.drawRectangle(coords[0], coords[1], coords[2], coords[3])
-        for i in self.imageCanvas:
-            print(''.join(i))
-
-    def drawPoint(self, x, y):
-        self.imageCanvas[x][y] = self.symphol
-
-    def drawLine(self, x, y, x1, y1):
-        if x == x1 and y1 != y:
-            for cordY in range(y, y1 + 1):
-                self.drawPoint(x, cordY)
-        elif y1 == y and x1 != x:
-            for cordX in range(x, x1 + 1):
-                self.drawPoint(cordX, y)
-        else:
-            k = (y1 - y) / (x1 - x)
-            b = y - k * x
-            for cordX in range(x, x1 + 1):
-                self.drawPoint(cordX, int((k * cordX) + b))
-
-    def drawRectangle(self, x, y, x1, y1):
-        self.drawLine(x, y, x, y1)
-        self.drawLine(x, y, x1, y)
-        self.drawLine(x, y1, x1, y1)
-        self.drawLine(x1, y1, x1, y)
-
-
-
+        for y in range(self.sizeY):
+            for x in range(self.sizeX):
+                print(self.chars[x, y], end='')
+            print()
