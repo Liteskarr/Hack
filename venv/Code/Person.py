@@ -7,12 +7,15 @@ from Load import Load
 NAME_M_LIST = Load.load_json('Resources//names.json')['names_m']
 NAME_D_LIST = Load.load_json('Resources//names.json')['names_d']
 SURNAME = random.choice(Load.load_json('Resources//names.json')['surname'])
+
 """Ивенты персонажей"""
 PERSON_EVENTS = ['fracture']
 PERSON_EVENTS_PRINT = Load.load_json('Resources//names.json')['PERSON_EVENTS_PRINT']
+
 """Особенности персонажей"""
 SPECIAL_BASE = [['smart', 'stupid'], ['light sleep'], ['strong', 'frail'], ['glutton']]
 SPECIAL_BASE_PRINT = Load.load_json('Resources//names.json')['SPECIAL_BASE_PRINT']
+
 """Основные параметры"""
 RAND_SEED = random.randint(0, 100)
 LIMIT_CONTROL, LIMIT_STRESS = 100, 100
@@ -238,21 +241,30 @@ def events_time():
 
 
 class Gen:
-    print(PERSON_EVENTS_PRINT)
     mam = Mom()
     dad = Dad()
     dau = Daughter()
     son = Son()
     son.set_age(mam.age, dad.age)
     dau.set_age(mam.age, dad.age)
-    print(f'{mam}:\nИмя:{mam.name}\nФамилия:{mam.surname}\nВозраст:{mam.age}\nОсобенности:')
-    for i in mam.special:
-        print(i)
-        print(f'{SPECIAL_BASE_PRINT[i]}')
-    print(f'Умения: {mam.skills}\nБафы: {mam.buff}\nДебафы: {mam.de_buff}')
+
+
+def info(ge):
+    var = {'mam': ge.mam, 'dad': ge.dad, 'dau': ge.dau, 'son': ge.son}
+    pers = input('Введите, чтобы получить статистику(mam, dad, dau, son). '
+                 'Или нажмите {enter}, чтобы не выводить статисику.\n')
+    if pers != '':
+        print(f'Статистика персонажа {pers}:\n\tИмя: {var[pers].name}\n\tФамилия: {var[pers].surname}\n\t'
+              f'Возраст: {var[pers].age}\n\tОсобенности:')
+        for i in var[pers].special:
+            print(f'\t\t{SPECIAL_BASE_PRINT[i]}')
+        print(f'\tУмения: {var[pers].skills}\n\tБафы: {var[pers].buff}\n\tДебафы: {var[pers].de_buff}')
 
 
 if __name__ == '__main__':
     g = Gen()
-
-
+    info(g)
+    info(g)
+    info(g)
+    info(g)
+    info(g)
