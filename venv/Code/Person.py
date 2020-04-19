@@ -11,7 +11,8 @@ LIMIT_HP = 100
 LIMIT_BUFF = 5
 LIMIT_DE_BUFF = 5
 TIME_SECONDS = 2
-PERSON_EVENTS = ['fracture', 'overeaten']
+SPECIAL_BASE = {}
+PERSON_EVENTS = ['fracture']
 PERSON_EVENTS_PRINT = {'fracture': 'Вы всподкнулись и получили перелом.',
                        'overeaten': 'Вы слишком много съели и объелись.',
                        'full_eat': 'Вы вкусно покушали и чувствуете сытость.',
@@ -157,14 +158,13 @@ class Person:
         else:
             if len(self.de_buff) < LIMIT_DE_BUFF:
                 self.de_buff.add(de_buffs)
-                print(self.de_buff)
                 print(f'{PERSON_EVENTS_PRINT[de_buffs]}')
             else:
                 print('Количество дебафов максимально')
         return Person.v_vid(self)
 
 
-class Mom(Person):
+class Mom_Gen(Person):
     def set_name(self):
         self.name = "Имя матери"
         return self.name
@@ -179,19 +179,92 @@ class Mom(Person):
         return self.age
 
     def __init__(self):
-        self.name, self.surname, self.age = Mom.set_name(self), Mom.set_surname(self), Mom.set_age(self)
+        self.name, self.surname, self.age = Mom_Gen.set_name(self), Mom_Gen.set_surname(self), Mom_Gen.set_age(self)
         self.ind_mom = []
         super().__init__(self.name, self.surname, self.age)
 
     def main(self):
-        self.ind_mom = [Mom().name, Mom().surname, Mom().age]
+        self.ind_mom = [Mom_Gen().name, Mom_Gen().surname, Mom_Gen().age]
         return self.ind_mom
+
+
+class Dad_Gen(Person):
+    def set_name(self):
+        self.name = "Имя отца"
+        return self.name
+
+    def set_surname(self):
+        self.surname = "Фамилия"
+        return self.surname
+
+    def set_age(self):
+        random.seed(RAND_SEED)
+        self.age = random.randint(22, 60)
+        return self.age
+
+    def __init__(self):
+        self.name, self.surname, self.age = Dad_Gen.set_name(self), Dad_Gen.set_surname(self), Dad_Gen.set_age(self)
+        self.ind_dad = []
+        super().__init__(self.name, self.surname, self.age)
+
+    def main(self):
+        self.ind_dad = [Dad_Gen().name, Dad_Gen().surname, Dad_Gen().age]
+        return self.ind_dad
+
+
+class Son_Gen(Person):
+    def set_name(self):
+        self.name = "Имя сына"
+        return self.name
+
+    def set_surname(self):
+        self.surname = "Фамилия"
+        return self.surname
+
+    def set_age(self):
+        random.seed(RAND_SEED)
+        self.age = random.randint(Mom_Gen().set_age() - 19, Dad_Gen().set_age() - 20)
+        return self.age
+
+    def __init__(self):
+        self.name, self.surname, self.age = Son_Gen.set_name(self), Son_Gen.set_surname(self), Son_Gen.set_age(self)
+        self.ind_son = []
+        super().__init__(self.name, self.surname, self.age)
+
+    def main(self):
+        self.ind_son = [Dad_Gen().name, Dad_Gen().surname, Dad_Gen().age]
+        return self.ind_son
+
+
+class Daughter_Gen(Person):
+    def set_name(self):
+        self.name = "Имя дочери"
+        return self.name
+
+    def set_surname(self):
+        self.surname = "Фамилия"
+        return self.surname
+
+    def set_age(self):
+        random.seed(RAND_SEED)
+        self.age = random.randint(Mom_Gen().set_age() - 19, Dad_Gen().set_age() - 20)
+        return self.age
+
+    def __init__(self):
+        self.name, self.surname = Daughter_Gen.set_name(self), Daughter_Gen.set_surname(self)
+        self.age = Daughter_Gen.set_age(self)
+        self.ind_dau = []
+        super().__init__(self.name, self.surname, self.age)
+
+    def main(self):
+        self.ind_dau = [Daughter_Gen().name, Daughter_Gen().surname, Daughter_Gen().age]
+        return self.ind_dau
 
 
 def events_time():
     """Проходит день."""
     for i in range(1, 13):
-        if random.randint(1, 6) == 3:
+        if random.randint(1, 4) == 3:
             event = random.choice(PERSON_EVENTS)
             print(f'Сейчас {i} час. Выпало {event}')
             # дебаф добовляем персанажу Mom
@@ -214,4 +287,4 @@ def test():
 
 
 if __name__ == '__main__':
-    test()
+    events_time()
