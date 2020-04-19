@@ -9,6 +9,7 @@ class Scene:
         self.game = game
         self.renders = []
         self.ui_map = []
+        self.listener = None
 
     def add_render(self, obj):
         self.renders.append(obj)
@@ -18,3 +19,9 @@ class Scene:
 
     def get_ui(self, x, y):
         return self.ui_map[x][y]
+
+    def update(self):
+        pass
+
+    def start(self):
+        pass

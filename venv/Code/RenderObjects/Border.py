@@ -6,4 +6,4 @@ class Border(IRenderObject.IRenderObject):
         self.char = char
 
     def darw(self, target):
-        target.add_line(0, 0, target.sizeX, 0, self.char)
+        target.add_rect(0, 0, target.sizeX - 1, target.sizeY - 1, self.char)
