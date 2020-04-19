@@ -5,6 +5,7 @@ from Load import Load
 
 NAME_M_LIST = Load.load_json('Resources//names.json')['names_m']
 NAME_D_LIST = Load.load_json('Resources//names.json')['names_d']
+SURNAME = Load.load_json('Resources//names.json')['surname']
 PERSON_EVENTS = ['fracture']
 PERSON_EVENTS_PRINT = Load.load_json('Resources//names.json')['PERSON_EVENTS_PRINT']
 SPECIAL_BASE = [['smart', 'stupid'], ['light sleep'], ['strong', 'frail'], ['glutton']]
