@@ -1,26 +1,20 @@
 import random
 import time
+from Load import Load
 
 
+NAME_M_LIST = Load.load_json('Resources//names.json')['names_m']
+NAME_D_LIST = Load.load_json('Resources//names.json')['names_d']
+PERSON_EVENTS = ['fracture']
+PERSON_EVENTS_PRINT = Load.load_json('Resources//names.json')['PERSON_EVENTS_PRINT']
+SPECIAL_BASE = [['smart', 'stupid'], ['light sleep'], ['strong', 'frail'], ['glutton']]
+SPECIAL_BASE_PRINT = Load.load_json('Resources//names.json')['SPECIAL_BASE_PRINT']
 RAND_SEED = random.randint(0, 100)
 LIMIT_CONTROL, LIMIT_STRESS = 100, 100
 LIMIT_HP, LIMIT_HUNGER, LIMIT_WATER = 100, 100, 100
 LIMIT_BUFF, LIMIT_DE_BUFF = 3, 3
 LIMIT_SPECIAL = 3
 TIME_SECONDS = 2
-SPECIAL_BASE = [['smart', 'stupid'], ['light sleep'], ['strong', 'frail'], ['glutton']]
-SPECIAL_BASE_PRINT = {'smart': 'Персонаж имеет повышенный уровень интеллекта.',
-                      'stupid': 'Персонаж имеет пониженный уровень интеллекта.',
-                      'light sleep': 'Персонаж чуток во сне.',
-                      'strong': 'Персонаж в хорошей физической форме.',
-                      'frail': 'Персонаж в плохой физической форме.',
-                      'glutton': 'Персонаж любит покушать.',
-                      }
-PERSON_EVENTS = ['fracture']
-PERSON_EVENTS_PRINT = {'fracture': 'Вы всподкнулись и получили перелом.',
-                       'overeaten': 'Вы слишком много съели и объелись.',
-                       'full_eat': 'Вы вкусно покушали и чувствуете сытость.',
-                       '': ''}
 
 
 class Person:
@@ -248,6 +242,4 @@ class Gen:
 
 
 if __name__ == '__main__':
-    per = Gen()
-    print(per.mam.age)
 

@@ -1,5 +1,15 @@
 {
-  "names_m": [],
-  "names_d": [],
-  "surnames": []
+  "names_m": ["Jack", "James", "Daniel", "Harry", "Charlie", "Ethan", "Matthew", "Ryen",
+               "Riley ", "Noah", "Jacob", "Oliver", "Riley ", "Alfie", "Mason", "Dylan"],
+  "names_d": ["Sophie", "Emily", "Grace", "Amelia", "Jessica", "Lucy", "Sophia", "Katie", "Eva", "Aoife", "Mia"],
+  "surnames": ["Abramson", "Hoggarth", "Adamson", "Holiday", "Adderiy", "Holmes", "Addington", "Howard", "Adrian",
+                "Jacobson", "Albertson", "James", "Aldridge", "Jeff", "Allford", "Jenkin", "Alsopp", "Jerome"],
+  "SPECIAL_BASE_PRINT": {"stupid": "Персонаж имеет пониженный уровень интеллекта.",
+                         "light sleep": "Персонаж чуток во сне.",
+                         "strong": "Персонаж в хорошей физической форме.",
+                         "frail": "Персонаж в плохой физической форме.",
+                         "glutton": "Персонаж любит покушать."},
+  "PERSON_EVENTS_PRINT": {"fracture": "Вы всподкнулись и получили перелом.",
+                       "overeaten": "Вы слишком много съели и объелись.",
+                       "full_eat": "Вы вкусно покушали и чувствуете сытость."}
 }
