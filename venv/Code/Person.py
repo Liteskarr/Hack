@@ -5,7 +5,7 @@ from Load import Load
 
 NAME_M_LIST = Load.load_json('Resources//names.json')['names_m']
 NAME_D_LIST = Load.load_json('Resources//names.json')['names_d']
-SURNAME = Load.load_json('Resources//names.json')['surname']
+SURNAME = random.choice(Load.load_json('Resources//names.json')['surname'])
 PERSON_EVENTS = ['fracture']
 PERSON_EVENTS_PRINT = Load.load_json('Resources//names.json')['PERSON_EVENTS_PRINT']
 SPECIAL_BASE = [['smart', 'stupid'], ['light sleep'], ['strong', 'frail'], ['glutton']]
@@ -108,11 +108,11 @@ class Person:
 
 class Mom(Person):
     def set_name(self):
-        self.name = "Имя матери"
+        self.name = random.choice(NAME_D_LIST)
         return self.name
 
     def set_surname(self):
-        self.surname = "Фамилия"
+        self.surname = SURNAME
         return self.surname
 
     def set_age(self):
@@ -136,11 +136,11 @@ class Mom(Person):
 
 class Dad(Person):
     def set_name(self):
-        self.name = "Имя отца"
+        self.name = random.choice(NAME_M_LIST)
         return self.name
 
     def set_surname(self):
-        self.surname = "Фамилия"
+        self.surname = SURNAME
         return self.surname
 
     def set_age(self):
@@ -164,11 +164,11 @@ class Dad(Person):
 
 class Son(Person):
     def set_name(self):
-        self.name = "Имя сына"
+        self.name = random.choice(NAME_M_LIST)
         return self.name
 
     def set_surname(self):
-        self.surname = "Фамилия"
+        self.surname = SURNAME
         return self.surname
 
     def set_age(self, mam, dad):
@@ -194,11 +194,11 @@ class Son(Person):
 
 class Daughter(Person):
     def set_name(self):
-        self.name = "Имя дочери"
+        self.name = random.choice(NAME_D_LIST)
         return self.name
 
     def set_surname(self):
-        self.surname = "Фамилия"
+        self.surname = SURNAME
         return self.surname
 
     def set_age(self, mam, dad):
@@ -243,4 +243,5 @@ class Gen:
 
 
 if __name__ == '__main__':
+    g = Gen()
 
