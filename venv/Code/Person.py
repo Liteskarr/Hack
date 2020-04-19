@@ -238,7 +238,7 @@ def events_time():
         time.sleep(TIME_SECONDS)
 
 
-def gen():
+class Gen:
     mam = Mom()
     dad = Dad()
     dau = Daughter()
@@ -248,6 +248,6 @@ def gen():
 
 
 if __name__ == '__main__':
-    gen()
-
+    per = Gen()
+    print(per.mam.age)
 
