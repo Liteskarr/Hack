@@ -6,7 +6,7 @@ class Load:
     @staticmethod
     def load_json(filepath: str) -> dict:
         """ Загружает json из файла. """
-        with open(filepath) as file:
+        with open(filepath, encoding="UTF-8") as file:
             json_str = ''
             for s in file:
                 json_str += s
