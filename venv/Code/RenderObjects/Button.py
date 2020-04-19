@@ -10,10 +10,11 @@ class Button(IRenderObject):
         self.text = text
         self.on_click = on_click
         self.on_overlap = on_overlap
-        self.border_char = '#'
+        self.border_char = Back.LIGHTWHITE_EX+ ' ' + Back.RESET
         self.fill_char = Back.BLACK + ' ' + Back.RESET
 
     def darw(self, target):
+        target.fill_rect(self.x1 + 1, self.y1 + 1, self.sizeX - 2, self.sizeY - 2, self.fill_char)
         target.add_rect(self.x1, self.y1, self.sizeX, self.sizeY, self.border_char)
-        target.fill_rect(self.x1 + 1, self.y1 + 1, self.sizeX - 1, self.sizeY - 1, self.fill_char)
-        target.add_text()
+        target.add_text(self.x1 + 2, (2 * self.y1 + self.sizeY) // 2,
+                        len(self.text), 1, self.text)

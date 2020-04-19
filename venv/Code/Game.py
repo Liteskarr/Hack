@@ -1,28 +1,30 @@
 import threading
 import os
+import msvcrt
+
+from Code.Canvas import Canvas
 
 
 class Game:
-    def __init__(self):
-        self.draw_thread = None
-        self.input_thread = None
-        self.update_thread = None
+    def __init__(self, canvas=Canvas(100, 50)):
+        self.is_run = True
+        self.loaded_scene = None
+        self.canvas = canvas
 
-    def set_draw(self, func):
-        self.draw_thread = threading.Thread(target=func)
+    def load_scene(self, scene):
+        self.loaded_scene = scene
 
-    def set_input(self, func):
-        self.input_thread = threading.Thread(target=func)
-
-    def set_update(self, func):
-        self.update_thread = threading.Thread(target=func)
+    def draw(self):
+        os.system(f'mode con cols={self.canvas.sizeX} lines={self.canvas.sizeY}')
+        os.system('cls')
+        for rend in self.loaded_scene:
+            self.canvas(rend)
 
     def start(self):
-        self.draw_thread.start()
-        self.input_thread.start()
-        self.update_thread.start()
+        if self.loaded_scene is None:
+            print('Сцена не загружена!')
+            return
 
-    def join(self):
-        self.draw_thread.join()
-        self.update_thread.join()
-        self.input_thread.join()
+        while self.is_run:
+            self.loaded_scene.update()
+            draw()
