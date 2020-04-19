@@ -5,17 +5,17 @@ import time
 RAND_SEED = random.randint(0, 100)
 LIMIT_CONTROL, LIMIT_STRESS = 100, 100
 LIMIT_HP, LIMIT_HUNGER, LIMIT_WATER = 100, 100, 100
-LIMIT_BUFF = 3
-LIMIT_DE_BUFF = 3
+LIMIT_BUFF, LIMIT_DE_BUFF = 3, 3
+LIMIT_SPECIAL = 3
 TIME_SECONDS = 2
-SPECIAL_BASE_PRINT = {'Smart': 'Персонаж имеет повышенный уровень интеллекта.',
+SPECIAL_BASE = [['smart', 'stupid'], ['light sleep'], ['strong', 'frail'], ['glutton']]
+SPECIAL_BASE_PRINT = {'smart': 'Персонаж имеет повышенный уровень интеллекта.',
                       'stupid': 'Персонаж имеет пониженный уровень интеллекта.',
                       'light sleep': 'Персонаж чуток во сне.',
                       'strong': 'Персонаж в хорошей физической форме.',
                       'frail': 'Персонаж в плохой физической форме.',
                       'glutton': 'Персонаж любит покушать.',
-                      '': '',
-                      '': ''}
+                      }
 PERSON_EVENTS = ['fracture']
 PERSON_EVENTS_PRINT = {'fracture': 'Вы всподкнулись и получили перелом.',
                        'overeaten': 'Вы слишком много съели и объелись.',
@@ -27,7 +27,7 @@ class Person:
     """ Персонажи. """
 
     def __init__(self, name: str = 'Имя', surname: str = 'фамилия', age: int = 0,
-                 special: dict = dict(), skills: set = set(), buff: list = set(), de_buff: list = set()):
+                 special: set = set(), skills: set = set(), buff: list = set(), de_buff: list = set()):
         """ Конструктор. """
         self.name, self.surname, self.age = name, surname, age
         self.control,  self.hunger, self.water = LIMIT_CONTROL, LIMIT_HUNGER, LIMIT_WATER
@@ -121,18 +121,22 @@ class Mom(Person):
         return self.surname
 
     def set_age(self):
-        random.seed(RAND_SEED)
         self.age = random.randint(20, 55)
         return self.age
 
+    def set_special(self):
+        temp = list(SPECIAL_BASE)
+        self.special = set()
+        for _ in range(LIMIT_SPECIAL):
+            spec_group = random.choice(temp)
+            temp.remove(spec_group)
+            self.special.add(random.choice(spec_group))
+        return self.special
+
     def __init__(self):
         self.name, self.surname, self.age = Mom.set_name(self), Mom.set_surname(self), Mom.set_age(self)
-        self.ind_mom = []
-        super().__init__(self.name, self.surname, self.age)
-
-    def main(self):
-        self.ind_mom = [Mom().name, Mom().surname, Mom().age]
-        return self.ind_mom
+        self.special = Mom.set_special(self)
+        super().__init__(self.name, self.surname, self.age, self.special)
 
 
 class Dad(Person):
@@ -145,18 +149,22 @@ class Dad(Person):
         return self.surname
 
     def set_age(self):
-        random.seed(RAND_SEED)
         self.age = random.randint(22, 60)
         return self.age
 
+    def set_special(self):
+        temp = list(SPECIAL_BASE)
+        self.special = set()
+        for _ in range(LIMIT_SPECIAL):
+            spec_group = random.choice(temp)
+            temp.remove(spec_group)
+            self.special.add(random.choice(spec_group))
+        return self.special
+
     def __init__(self):
         self.name, self.surname, self.age = Dad.set_name(self), Dad.set_surname(self), Dad.set_age(self)
-        self.ind_dad = []
-        super().__init__(self.name, self.surname, self.age)
-
-    def main(self):
-        self.ind_dad = [Dad().name, Dad().surname, Dad().age]
-        return self.ind_dad
+        self.special = Dad.set_special(self)
+        super().__init__(self.name, self.surname, self.age, self.special)
 
 
 class Son(Person):
@@ -168,19 +176,25 @@ class Son(Person):
         self.surname = "Фамилия"
         return self.surname
 
-    def set_age(self):
-        random.seed(RAND_SEED)
-        self.age = random.randint(Son().set_age() - 19, Son().set_age() - 20)
+    def set_age(self, mam, dad):
+        temp = [mam - 19, dad - 20]
+        temp.sort()
+        self.age = random.randint(*temp)
         return self.age
 
-    def __init__(self):
-        self.name, self.surname, self.age = Son.set_name(self), Son.set_surname(self), Son.set_age(self)
-        self.ind_son = []
-        super().__init__(self.name, self.surname, self.age)
+    def set_special(self):
+        temp = list(SPECIAL_BASE)
+        self.special = set()
+        for _ in range(LIMIT_SPECIAL):
+            spec_group = random.choice(temp)
+            temp.remove(spec_group)
+            self.special.add(random.choice(spec_group))
+        return self.special
 
-    def main(self):
-        self.ind_son = [Son().name, Son().surname, Son().age]
-        return self.ind_son
+    def __init__(self):
+        self.name, self.surname, self.age = Son.set_name(self), Son.set_surname(self), 0
+        self.special = Son.set_special(self)
+        super().__init__(self.name, self.surname, self.age, self.special)
 
 
 class Daughter(Person):
@@ -192,19 +206,25 @@ class Daughter(Person):
         self.surname = "Фамилия"
         return self.surname
 
-    def set_age(self):
-        random.seed(RAND_SEED)
-        self.age = random.randint(Mom_Gen().set_age() - 19, Dad_Gen().set_age() - 20)
+    def set_age(self, mam, dad):
+        temp = [mam - 19, dad - 20]
+        temp.sort()
+        self.age = random.randint(*temp)
         return self.age
 
-    def __init__(self):
-        self.name, self.surname, self.age = Daughter.set_name(self), Daughter.set_surname(self), Daughter.set_age(self)
-        self.ind_dau = []
-        super().__init__(self.name, self.surname, self.age)
+    def set_special(self):
+        temp = list(SPECIAL_BASE)
+        self.special = set()
+        for _ in range(LIMIT_SPECIAL):
+            spec_group = random.choice(temp)
+            temp.remove(spec_group)
+            self.special.add(random.choice(spec_group))
+        return self.special
 
-    def main(self):
-        self.ind_dau = [Daughter().name, Daughter().surname, Daughter().age]
-        return self.ind_dau
+    def __init__(self):
+        self.name, self.surname, self.age = Daughter.set_name(self), Daughter.set_surname(self), 0
+        self.special = Daughter.set_special(self)
+        super().__init__(self.name, self.surname, self.age, self.special)
 
 
 def events_time():
@@ -218,15 +238,16 @@ def events_time():
         time.sleep(TIME_SECONDS)
 
 
-def test():
+def gen():
     mam = Mom()
-    mam.left_hunger(60)
-    print(mam.hunger)
-    mam.left_hunger(20)
-    print(mam.hunger)
+    dad = Dad()
+    dau = Daughter()
+    son = Son()
+    son.set_age(mam.age, dad.age)
+    dau.set_age(mam.age, dad.age)
 
 
 if __name__ == '__main__':
-    test()
+    gen()
 
 
