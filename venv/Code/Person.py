@@ -3,20 +3,117 @@ import time
 
 
 RAND_SEED = random.randint(0, 100)
-LIMIT_CONTROL = 100
-LIMIT_STRESS = 100
-LIMIT_HUNGER = 100
-LIMIT_WATER = 100
-LIMIT_HP = 100
-LIMIT_BUFF = 5
-LIMIT_DE_BUFF = 5
+LIMIT_CONTROL, LIMIT_STRESS = 100, 100
+LIMIT_HP, LIMIT_HUNGER, LIMIT_WATER = 100, 100, 100
+LIMIT_BUFF = 3
+LIMIT_DE_BUFF = 3
 TIME_SECONDS = 2
-SPECIAL_BASE = {}
+SPECIAL_BASE_PRINT = {'Smart': 'Персонаж имеет повышенный уровень интеллекта.',
+                      'stupid': 'Персонаж имеет пониженный уровень интеллекта.',
+                      'light sleep': 'Персонаж чуток во сне.',
+                      'strong': 'Персонаж в хорошей физической форме.',
+                      'frail': 'Персонаж в плохой физической форме.',
+                      'glutton': 'Персонаж любит покушать.',
+                      '': '',
+                      '': ''}
 PERSON_EVENTS = ['fracture']
 PERSON_EVENTS_PRINT = {'fracture': 'Вы всподкнулись и получили перелом.',
                        'overeaten': 'Вы слишком много съели и объелись.',
                        'full_eat': 'Вы вкусно покушали и чувствуете сытость.',
                        '': ''}
+
+
+class Mom_Gen:
+    def set_name(self):
+        self.name = "Имя матери"
+        return self.name
+
+    def set_surname(self):
+        self.surname = "Фамилия"
+        return self.surname
+
+    def set_age(self):
+        random.seed(RAND_SEED)
+        self.age = random.randint(20, 55)
+        return self.age
+
+    def __init__(self):
+        self.name, self.surname, self.age = Mom_Gen.set_name(self), Mom_Gen.set_surname(self), Mom_Gen.set_age(self)
+        self.ind_mom = []
+
+    def main(self):
+        self.ind_mom = [Mom_Gen().name, Mom_Gen().surname, Mom_Gen().age]
+        return self.ind_mom
+
+
+class Dad_Gen:
+    def set_name(self):
+        self.name = "Имя отца"
+        return self.name
+
+    def set_surname(self):
+        self.surname = "Фамилия"
+        return self.surname
+
+    def set_age(self):
+        random.seed(RAND_SEED)
+        self.age = random.randint(22, 60)
+        return self.age
+
+    def __init__(self):
+        self.name, self.surname, self.age = Dad_Gen.set_name(self), Dad_Gen.set_surname(self), Dad_Gen.set_age(self)
+        self.ind_dad = []
+
+    def main(self):
+        self.ind_dad = [Dad_Gen().name, Dad_Gen().surname, Dad_Gen().age]
+        return self.ind_dad
+
+
+class Son_Gen:
+    def set_name(self):
+        self.name = "Имя сына"
+        return self.name
+
+    def set_surname(self):
+        self.surname = "Фамилия"
+        return self.surname
+
+    def set_age(self):
+        random.seed(RAND_SEED)
+        self.age = random.randint(Mom_Gen().set_age() - 19, Dad_Gen().set_age() - 20)
+        return self.age
+
+    def __init__(self):
+        self.name, self.surname, self.age = Son_Gen.set_name(self), Son_Gen.set_surname(self), Son_Gen.set_age(self)
+        self.ind_son = []
+
+    def main(self):
+        self.ind_son = [Dad_Gen().name, Dad_Gen().surname, Dad_Gen().age]
+        return self.ind_son
+
+
+class Daughter_Gen:
+    def set_name(self):
+        self.name = "Имя дочери"
+        return self.name
+
+    def set_surname(self):
+        self.surname = "Фамилия"
+        return self.surname
+
+    def set_age(self):
+        random.seed(RAND_SEED)
+        self.age = random.randint(Mom_Gen().set_age() - 19, Dad_Gen().set_age() - 20)
+        return self.age
+
+    def __init__(self):
+        self.name, self.surname = Daughter_Gen.set_name(self), Daughter_Gen.set_surname(self)
+        self.age = Daughter_Gen.set_age(self)
+        self.ind_dau = []
+
+    def main(self):
+        self.ind_dau = [Daughter_Gen().name, Daughter_Gen().surname, Daughter_Gen().age]
+        return self.ind_dau
 
 
 class Person:
@@ -162,103 +259,6 @@ class Person:
             else:
                 print('Количество дебафов максимально')
         return Person.v_vid(self)
-
-
-class Mom_Gen(Person):
-    def set_name(self):
-        self.name = "Имя матери"
-        return self.name
-
-    def set_surname(self):
-        self.surname = "Фамилия"
-        return self.surname
-
-    def set_age(self):
-        random.seed(RAND_SEED)
-        self.age = random.randint(20, 55)
-        return self.age
-
-    def __init__(self):
-        self.name, self.surname, self.age = Mom_Gen.set_name(self), Mom_Gen.set_surname(self), Mom_Gen.set_age(self)
-        self.ind_mom = []
-        super().__init__(self.name, self.surname, self.age)
-
-    def main(self):
-        self.ind_mom = [Mom_Gen().name, Mom_Gen().surname, Mom_Gen().age]
-        return self.ind_mom
-
-
-class Dad_Gen(Person):
-    def set_name(self):
-        self.name = "Имя отца"
-        return self.name
-
-    def set_surname(self):
-        self.surname = "Фамилия"
-        return self.surname
-
-    def set_age(self):
-        random.seed(RAND_SEED)
-        self.age = random.randint(22, 60)
-        return self.age
-
-    def __init__(self):
-        self.name, self.surname, self.age = Dad_Gen.set_name(self), Dad_Gen.set_surname(self), Dad_Gen.set_age(self)
-        self.ind_dad = []
-        super().__init__(self.name, self.surname, self.age)
-
-    def main(self):
-        self.ind_dad = [Dad_Gen().name, Dad_Gen().surname, Dad_Gen().age]
-        return self.ind_dad
-
-
-class Son_Gen(Person):
-    def set_name(self):
-        self.name = "Имя сына"
-        return self.name
-
-    def set_surname(self):
-        self.surname = "Фамилия"
-        return self.surname
-
-    def set_age(self):
-        random.seed(RAND_SEED)
-        self.age = random.randint(Mom_Gen().set_age() - 19, Dad_Gen().set_age() - 20)
-        return self.age
-
-    def __init__(self):
-        self.name, self.surname, self.age = Son_Gen.set_name(self), Son_Gen.set_surname(self), Son_Gen.set_age(self)
-        self.ind_son = []
-        super().__init__(self.name, self.surname, self.age)
-
-    def main(self):
-        self.ind_son = [Dad_Gen().name, Dad_Gen().surname, Dad_Gen().age]
-        return self.ind_son
-
-
-class Daughter_Gen(Person):
-    def set_name(self):
-        self.name = "Имя дочери"
-        return self.name
-
-    def set_surname(self):
-        self.surname = "Фамилия"
-        return self.surname
-
-    def set_age(self):
-        random.seed(RAND_SEED)
-        self.age = random.randint(Mom_Gen().set_age() - 19, Dad_Gen().set_age() - 20)
-        return self.age
-
-    def __init__(self):
-        self.name, self.surname = Daughter_Gen.set_name(self), Daughter_Gen.set_surname(self)
-        self.age = Daughter_Gen.set_age(self)
-        self.ind_dau = []
-        super().__init__(self.name, self.surname, self.age)
-
-    def main(self):
-        self.ind_dau = [Daughter_Gen().name, Daughter_Gen().surname, Daughter_Gen().age]
-        return self.ind_dau
 
 
 def events_time():
