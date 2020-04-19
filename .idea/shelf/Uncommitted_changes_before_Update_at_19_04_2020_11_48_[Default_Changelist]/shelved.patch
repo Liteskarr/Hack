@@ -1,0 +1,254 @@
+Index: venv/Code/Game.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import threading\r\nimport os\r\n\r\n\r\nclass Game:\r\n    def __init__(self):\r\n        self.draw_thread = None\r\n        self.input_thread = None\r\n        self.update_thread = None\r\n\r\n    def set_draw(self, func):\r\n        self.draw_thread = threading.Thread(target=func)\r\n\r\n    def set_input(self, func):\r\n        self.input_thread = threading.Thread(target=func)\r\n\r\n    def set_update(self, func):\r\n        self.update_thread = threading.Thread(target=func)\r\n\r\n    def start(self):\r\n        self.draw_thread.start()\r\n        self.input_thread.start()\r\n        self.update_thread.start()\r\n\r\n    def join(self):\r\n        self.draw_thread.join()\r\n        self.update_thread.join()\r\n        self.input_thread.join()\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- venv/Code/Game.py	(revision bafd133c2bad4964e20ef62428e85ef21ca472b9)
++++ venv/Code/Game.py	(date 1587286104919)
+@@ -1,28 +1,30 @@
+ import threading
+ import os
++import msvcrt
++
++from Code.Canvas import Canvas
+ 
+ 
+ class Game:
+-    def __init__(self):
+-        self.draw_thread = None
+-        self.input_thread = None
+-        self.update_thread = None
++    def __init__(self, canvas=Canvas(100, 50)):
++        self.is_run = True
++        self.loaded_scene = None
++        self.canvas = canvas
+ 
+-    def set_draw(self, func):
+-        self.draw_thread = threading.Thread(target=func)
++    def load_scene(self, scene):
++        self.loaded_scene = scene
+ 
+-    def set_input(self, func):
+-        self.input_thread = threading.Thread(target=func)
+-
+-    def set_update(self, func):
+-        self.update_thread = threading.Thread(target=func)
++    def draw(self):
++        os.system(f'mode con cols={self.canvas.sizeX} lines={self.canvas.sizeY}')
++        os.system('cls')
++        for rend in self.loaded_scene:
++            self.canvas(rend)
+ 
+     def start(self):
+-        self.draw_thread.start()
+-        self.input_thread.start()
+-        self.update_thread.start()
++        if self.loaded_scene is None:
++            print('Сцена не загружена!')
++            return
+ 
+-    def join(self):
+-        self.draw_thread.join()
+-        self.update_thread.join()
+-        self.input_thread.join()
++        while self.is_run:
++            self.loaded_scene.update()
++            draw()
+Index: venv/Code/RenderObjects/Button.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from Code.IRenderObject import IRenderObject\r\nfrom colorama import Back\r\n\r\nclass Button(IRenderObject):\r\n    def __init__(self, x1, y1, sizeX, sizeY, text='', on_click=None, on_overlap=None):\r\n        self.x1 = x1\r\n        self.y1 = y1\r\n        self.sizeX = sizeX\r\n        self.sizeY = sizeY\r\n        self.text = text\r\n        self.on_click = on_click\r\n        self.on_overlap = on_overlap\r\n        self.border_char = '#'\r\n        self.fill_char = Back.BLACK + ' ' + Back.RESET\r\n\r\n    def darw(self, target):\r\n        target.add_rect(self.x1, self.y1, self.sizeX, self.sizeY, self.border_char)\r\n        target.fill_rect(self.x1 + 1, self.y1 + 1, self.sizeX - 1, self.sizeY - 1, self.fill_char)\r\n        target.add_text()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- venv/Code/RenderObjects/Button.py	(revision bafd133c2bad4964e20ef62428e85ef21ca472b9)
++++ venv/Code/RenderObjects/Button.py	(date 1587249780855)
+@@ -10,10 +10,11 @@
+         self.text = text
+         self.on_click = on_click
+         self.on_overlap = on_overlap
+-        self.border_char = '#'
++        self.border_char = Back.LIGHTWHITE_EX+ ' ' + Back.RESET
+         self.fill_char = Back.BLACK + ' ' + Back.RESET
+ 
+     def darw(self, target):
++        target.fill_rect(self.x1 + 1, self.y1 + 1, self.sizeX - 2, self.sizeY - 2, self.fill_char)
+         target.add_rect(self.x1, self.y1, self.sizeX, self.sizeY, self.border_char)
+-        target.fill_rect(self.x1 + 1, self.y1 + 1, self.sizeX - 1, self.sizeY - 1, self.fill_char)
+-        target.add_text()
+\ No newline at end of file
++        target.add_text(self.x1 + 2, (2 * self.y1 + self.sizeY) // 2,
++                        len(self.text), 1, self.text)
+\ No newline at end of file
+Index: venv/Code/Scene.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from collections import defaultdict\r\n\r\nimport Code.Canvas as Canvas\r\nimport Code.IRenderObject as IRenderObject\r\n\r\n\r\nclass Scene:\r\n    def __init__(self):\r\n        self.data = {}\r\n        self.data['renders'] = []\r\n\r\n    def get_renders(self):\r\n        return self.data['renders']\r\n\r\n    def add_render(self, obj: IRenderObject.IRenderObject):\r\n        self.data['renders'].append(obj)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- venv/Code/Scene.py	(revision bafd133c2bad4964e20ef62428e85ef21ca472b9)
++++ venv/Code/Scene.py	(date 1587285494624)
+@@ -5,12 +5,16 @@
+ 
+ 
+ class Scene:
+-    def __init__(self):
+-        self.data = {}
+-        self.data['renders'] = []
++    def __init__(self, game):
++        self.game = game
++        self.renders = []
++        self.ui_map = []
+ 
+-    def get_renders(self):
+-        return self.data['renders']
++    def add_render(self, obj):
++        self.renders.append(obj)
+ 
+-    def add_render(self, obj: IRenderObject.IRenderObject):
+-        self.data['renders'].append(obj)
+\ No newline at end of file
++    def set_ui_map(self, ui_map):
++        self.ui_map = ui_map
++
++    def get_ui(self, x, y):
++        return self.ui_map[x][y]
+Index: venv/Code/Program.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import os\r\nimport Code.Canvas as Canvas\r\nimport Code.RenderObjects.Border as Border\r\nimport Code.RenderObjects.Button as Button\r\nimport colorama\r\nfrom colorama import Back\r\ncolorama.init()\r\n\r\n\r\ndef default_update():\r\n    os.system(\"mode con cols=100 lines=49\")\r\n\r\ndefault_update()\r\n\r\ncan = Canvas.Canvas(10, 10)\r\n\r\nb = Button.Button(1, 1)\r\n\r\ncan.draw()\r\n\r\ninput()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- venv/Code/Program.py	(revision bafd133c2bad4964e20ef62428e85ef21ca472b9)
++++ venv/Code/Program.py	(date 1587279791432)
+@@ -1,21 +1,19 @@
+ import os
+-import Code.Canvas as Canvas
+-import Code.RenderObjects.Border as Border
+-import Code.RenderObjects.Button as Button
++#
+ import colorama
+ from colorama import Back
++#
++from Code.Game import Game
++from Code.Scenes.MainMenu import main_menu
++#
+ colorama.init()
+ 
+-
+ def default_update():
+     os.system("mode con cols=100 lines=49")
+ 
+ default_update()
+ 
+-can = Canvas.Canvas(10, 10)
+-
+-b = Button.Button(1, 1)
+-
+-can.draw()
+-
+-input()
+\ No newline at end of file
++game = Game()
++game.load_scene(main_menu)
++game.start()
++game.join()
+\ No newline at end of file
+Index: venv/Code/Scenes/MainMenu.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import Code.Scene as Scene\r\n\r\nMainMenu = Scene.Scene()
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- venv/Code/Scenes/MainMenu.py	(revision bafd133c2bad4964e20ef62428e85ef21ca472b9)
++++ venv/Code/Scenes/MainMenu.py	(date 1587285085798)
+@@ -1,3 +1,26 @@
+ import Code.Scene as Scene
++from Code.RenderObjects.Border import Border
++from Code.RenderObjects.Button import Button
++
++from colorama import Back
++
++
++
++class MainMenu(Scene.Scene()):
++    def __init__(self):
++        pass
++
++    def update(self):
++        pass
++
++    def
++
++
++main_menu = Scene.Scene()
++main_menu.add_render(Border(Back.CYAN + ' ' + Back.RESET))
++
++new_game = Button(1, 1, 5, 20)
++authors = Button(1, 1, 5, 20)
++leave = Button(1, 1, 5, 20)
+ 
+-MainMenu = Scene.Scene()
+\ No newline at end of file
++ui_map = [[new_game], [authors], [leave]]
+\ No newline at end of file
+Index: venv/Code/IUserInterface.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- venv/Code/IUserInterface.py	(date 1587285458476)
++++ venv/Code/IUserInterface.py	(date 1587285458476)
+@@ -0,0 +1,12 @@
++from Code.IRenderObject import IRenderObject
++
++
++class IUserInterface(IRenderObject):
++    def on_overlap(self, target):
++        pass
++
++    def on_click(self, target):
++        pass
++
++    def darw(self, target):
++        pass
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"Python 3.8\" project-jdk-type=\"Python SDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision bafd133c2bad4964e20ef62428e85ef21ca472b9)
++++ .idea/misc.xml	(date 1587243981908)
+@@ -1,4 +1,4 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8 (Hack)" project-jdk-type="Python SDK" />
+ </project>
+\ No newline at end of file
+Index: .idea/Hack.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module type=\"PYTHON_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\">\r\n    <content url=\"file://$MODULE_DIR$\">\r\n      <excludeFolder url=\"file://$MODULE_DIR$/myvenv\" />\r\n      <excludeFolder url=\"file://$MODULE_DIR$/venv\" />\r\n    </content>\r\n    <orderEntry type=\"jdk\" jdkName=\"Python 3.8\" jdkType=\"Python SDK\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/Hack.iml	(revision bafd133c2bad4964e20ef62428e85ef21ca472b9)
++++ .idea/Hack.iml	(date 1587243981898)
+@@ -5,7 +5,7 @@
+       <excludeFolder url="file://$MODULE_DIR$/myvenv" />
+       <excludeFolder url="file://$MODULE_DIR$/venv" />
+     </content>
+-    <orderEntry type="jdk" jdkName="Python 3.8" jdkType="Python SDK" />
++    <orderEntry type="jdk" jdkName="Python 3.8 (Hack)" jdkType="Python SDK" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+ </module>
+\ No newline at end of file
