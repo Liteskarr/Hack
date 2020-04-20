@@ -29,7 +29,7 @@ class Person:
     """ Персонажи. """
 
     def __init__(self, name: str = 'Имя', surname: str = 'фамилия', age: int = 0,
-                 special: set = set(), skills: set = set(), buff: list = set(), de_buff: list = set()):
+                 special: set = set(), skills: set = set(), buff: set = set(), de_buff: set = set()):
         """ Конструктор. """
         self.name, self.surname, self.age = name, surname, age
         self.control,  self.hunger, self.water = LIMIT_CONTROL, LIMIT_HUNGER, LIMIT_WATER
@@ -135,10 +135,20 @@ class Mom(Person):
             self.special.add(random.choice(spec_group))
         return self.special
 
+    def set_buff(self):
+        self.buff = set()
+        self.buff.add('full_eat')
+        return self.buff
+
+    def set_de_buff(self):
+        self.buff = set()
+        return self.buff
+
     def __init__(self):
         self.name, self.surname, self.age = Mom.set_name(self), Mom.set_surname(self), Mom.set_age(self)
-        self.special = Mom.set_special(self)
-        super().__init__(self.name, self.surname, self.age, self.special)
+        self.special, self.skills = Mom.set_special(self), set()
+        self.buff, self.de_buff = Mom.set_buff(self), Mom.set_de_buff(self)
+        super().__init__(self.name, self.surname, self.age, self.special, self.skills, self.buff, self.de_buff)
 
 
 class Dad(Person):
@@ -163,10 +173,20 @@ class Dad(Person):
             self.special.add(random.choice(spec_group))
         return self.special
 
+    def set_buff(self):
+        self.buff = set()
+        self.buff.add('full_eat')
+        return self.buff
+
+    def set_de_buff(self):
+        self.buff = set()
+        return self.buff
+
     def __init__(self):
         self.name, self.surname, self.age = Dad.set_name(self), Dad.set_surname(self), Dad.set_age(self)
-        self.special = Dad.set_special(self)
-        super().__init__(self.name, self.surname, self.age, self.special)
+        self.special, self.skills = Dad.set_special(self), set()
+        self.buff, self.de_buff = Dad.set_buff(self), Dad.set_de_buff(self)
+        super().__init__(self.name, self.surname, self.age, self.special, self.skills, self.buff, self.de_buff)
 
 
 class Son(Person):
@@ -193,10 +213,20 @@ class Son(Person):
             self.special.add(random.choice(spec_group))
         return self.special
 
+    def set_buff(self):
+        self.buff = set()
+        self.buff.add('full_eat')
+        return self.buff
+
+    def set_de_buff(self):
+        self.buff = set()
+        return self.buff
+
     def __init__(self):
         self.name, self.surname, self.age = Son.set_name(self), Son.set_surname(self), 0
-        self.special = Son.set_special(self)
-        super().__init__(self.name, self.surname, self.age, self.special)
+        self.special, self.skills = Son.set_special(self), set()
+        self.buff, self.de_buff = Son.set_buff(self), Son.set_de_buff(self)
+        super().__init__(self.name, self.surname, self.age, self.special, self.skills, self.buff, self.de_buff)
 
 
 class Daughter(Person):
@@ -223,10 +253,20 @@ class Daughter(Person):
             self.special.add(random.choice(spec_group))
         return self.special
 
+    def set_buff(self):
+        self.buff = set()
+        self.buff.add('full_eat')
+        return self.buff
+
+    def set_de_buff(self):
+        self.buff = set()
+        return self.buff
+
     def __init__(self):
         self.name, self.surname, self.age = Daughter.set_name(self), Daughter.set_surname(self), 0
-        self.special = Daughter.set_special(self)
-        super().__init__(self.name, self.surname, self.age, self.special)
+        self.special, self.skills = Daughter.set_special(self), set()
+        self.buff, self.de_buff = Daughter.set_buff(self), Daughter.set_de_buff(self)
+        super().__init__(self.name, self.surname, self.age, self.special, self.skills, self.buff, self.de_buff)
 
 
 def events_time():
@@ -254,11 +294,13 @@ def info(ge):
     pers = input('Введите, чтобы получить статистику(mam, dad, dau, son). '
                  'Или нажмите {enter}, чтобы не выводить статисику.\n')
     if pers != '':
-        print(f'Статистика персонажа {pers}:\n\tИмя: {var[pers].name}\n\tФамилия: {var[pers].surname}\n\t'
-              f'Возраст: {var[pers].age}\n\tОсобенности:')
-        for i in var[pers].special:
-            print(f'\t\t{SPECIAL_BASE_PRINT[i]}')
-        print(f'\tУмения: {var[pers].skills}\n\tБафы: {var[pers].buff}\n\tДебафы: {var[pers].de_buff}')
+        v = (f'Статистика персонажа {pers}:\n\tИмя: {var[pers].name}\n\tФамилия: {var[pers].surname}\n\t'
+             f'Возраст: {var[pers].age}\n\tОсобенности:\n\t\t')
+        v += '\n\t\t'.join([SPECIAL_BASE_PRINT[i] for i in list(var[pers].special)])
+        v += f'\n\tУмения: {var[pers].skills}\n\tБафы:\n\t\t'
+        v += '\n\t\t'.join([PERSON_EVENTS_PRINT[i] for i in list(var[pers].buff)])
+        v += f'\n\tДебафы: {var[pers].de_buff}'
+        print(v)
 
 
 if __name__ == '__main__':
